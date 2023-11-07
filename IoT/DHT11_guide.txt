@@ -6,7 +6,7 @@ Video link : https://www.youtube.com/watch?v=aTFpYflYOG4
     i) Sektch
     ii) Include library
     iii) Manage library
-    iV) Library Manager will appear -> searc as "dht11"
+    iV) Library Manager will appear -> searc as "dht"
         a) Click on "DHT sensor library" Install
         b) Click on "close" for Library Manager
     v) Upload the code
