@@ -1,154 +1,125 @@
 import java.util.Scanner;
 
-public class NonPreemptivePriority
-{
+class NonPriorityScheduling {
 
-    int burstTime[];
-    int priority[];
-    int arrivalTime[];
-    String[] processId;
-    int numberOfProcess;
+  public static void main(String[] args) {
 
-    void getProcessData(Scanner input) 
-    {
-        System.out.print("Enter the number of Process for Scheduling           : ");
-        int inputNumberOfProcess = input.nextInt();
-        numberOfProcess = inputNumberOfProcess;
-        burstTime = new int[numberOfProcess];
-        priority = new int[numberOfProcess];
-        arrivalTime = new int[numberOfProcess];
-        processId = new String[numberOfProcess];
-        String st = "P";
-        for (int i = 0; i < numberOfProcess; i++) 
-        {
-            processId[i] = st.concat(Integer.toString(i));
-            System.out.print("Enter the burst time   for Process - " + (i) + " : ");
-            burstTime[i] = input.nextInt();
-            System.out.print("Enter the arrival time for Process - " + (i) + " : ");
-            arrivalTime[i] = input.nextInt();
-            System.out.print("Enter the priority     for Process - " + (i) + " : ");
-            priority[i] = input.nextInt();
+    System.out.println("*** Priority Scheduling (Non Preemptive) ***");
+
+    System.out.print("Enter Number of Process: ");
+    Scanner sc = new Scanner(System.in);
+    int n = sc.nextInt();
+    int process[] = new int[n];
+    int arrivaltime[] = new int[n];
+    int burstTime[] = new int[n];
+    int completionTime[] = new int[n];
+    int priority[] = new int[n];
+    int TAT[] = new int[n];
+    int waitingTime[] = new int[n];
+    int arrivaltimecopy[] = new int[n];
+    int burstTimecopy[] = new int[n];
+    int max = -1, min = 9999;
+    int totalTime = 0, tLap, temp;
+    int minIndex = 0, currentIndex = 0;
+    double avgWT = 0, avgTAT = 0;
+    for (int i = 0; i < n; i++) {
+      process[i] = (i + 1);
+      System.out.println("");
+      System.out.print("Enter Arrival Time for processor " + (i + 1) + ":");
+      arrivaltime[i] = sc.nextInt();
+      System.out.print("Enter Burst Time for processor " + (i + 1) + " : ");
+      burstTime[i] = sc.nextInt();
+      System.out.print("Enter Priority for " + (i + 1) + " process: ");
+      priority[i] = sc.nextInt();
+    }
+    for (int i = 0; i < n - 1; i++) {
+      for (int j = i + 1; j < n; j++) {
+        if (arrivaltime[i] > arrivaltime[j]) {
+          temp = process[i];
+          process[i] = process[j];
+          process[j] = temp;
+          temp = arrivaltime[j];
+          arrivaltime[j] = arrivaltime[i];
+          arrivaltime[i] = temp;
+          temp = priority[j];
+          priority[j] = priority[i];
+          priority[i] = temp;
+          temp = burstTime[j];
+          burstTime[j] = burstTime[i];
+          burstTime[i] = temp;
+        } else if (arrivaltime[i] == arrivaltime[j] && priority[j] > priority[i]) {
+          temp = process[i];
+          process[i] = process[j];
+          process[j] = temp;
+          temp = arrivaltime[j];
+          arrivaltime[j] = arrivaltime[i];
+          arrivaltime[i] = temp;
+          temp = priority[j];
+          priority[j] = priority[i];
+          priority[i] = temp;
+          temp = burstTime[j];
+          burstTime[j] = burstTime[i];
+          burstTime[i] = temp;
         }
+      }
+    }
+    System.arraycopy(arrivaltime, 0, arrivaltimecopy, 0, n);
+    System.arraycopy(burstTime, 0, burstTimecopy, 0, n);
+
+    for (int i = 0; i < n; i++) {
+      totalTime += burstTime[i];
+      if (arrivaltime[i] < min) {
+        max = arrivaltime[i];
+      }
     }
 
-    void sortAccordingArrivalTimeAndPriority(int[] at, int[] bt, int[] prt, String[] pid) 
-    {
-
-        int temp;
-        String stemp;
-        for (int i = 0; i < numberOfProcess; i++) 
-        {
-
-            for (int j = 0; j < numberOfProcess - i - 1; j++) 
-            {
-                if (at[j] > at[j + 1]) 
-                {
-                    //swapping arrival time
-                    temp = at[j];
-                    at[j] = at[j + 1];
-                    at[j + 1] = temp;
-
-                    //swapping burst time
-                    temp = bt[j];
-                    bt[j] = bt[j + 1];
-                    bt[j + 1] = temp;
-
-                    //swapping priority
-                    temp = prt[j];
-                    prt[j] = prt[j + 1];
-                    prt[j + 1] = temp;
-
-                    //swapping process identity
-                    stemp = pid[j];
-                    pid[j] = pid[j + 1];
-                    pid[j + 1] = stemp;
-
-                }
-                //sorting according to priority when arrival timings are same
-                if (at[j] == at[j + 1]) 
-                {
-                    if (prt[j] > prt[j + 1]) 
-                    {
-                        //swapping arrival time
-                        temp = at[j];
-                        at[j] = at[j + 1];
-                        at[j + 1] = temp;
-
-                        //swapping burst time
-                        temp = bt[j];
-                        bt[j] = bt[j + 1];
-                        bt[j + 1] = temp;
-
-                        //swapping priority
-                        temp = prt[j];
-                        prt[j] = prt[j + 1];
-                        prt[j + 1] = temp;
-
-                        //swapping process identity
-                        stemp = pid[j];
-                        pid[j] = pid[j + 1];
-                        pid[j + 1] = stemp;
-
-                    }
-                }
-            }
-
-        }
+    for (int i = 0; i < n; i++) {
+      if (arrivaltime[i] < min) {
+        min = arrivaltime[i];
+        minIndex = i;
+        currentIndex = i;
+      }
     }
 
-    void priorityNonPreemptiveAlgorithm() 
-    {
-        int finishTime[] = new int[numberOfProcess];
-        int bt[] = burstTime.clone();
-        int at[] = arrivalTime.clone();
-        int prt[] = priority.clone();
-        String pid[] = processId.clone();
-        int waitingTime[] = new int[numberOfProcess];
-        int turnAroundTime[] = new int[numberOfProcess];
-
-        sortAccordingArrivalTimeAndPriority(at, bt, prt, pid);
-
-        //calculating waiting & turn-around time for each process
-        finishTime[0] = at[0] + bt[0];
-        turnAroundTime[0] = finishTime[0] - at[0];
-        waitingTime[0] = turnAroundTime[0] - bt[0];
-
-        for (int i = 1; i < numberOfProcess; i++) 
-        {
-            finishTime[i] = bt[i] + finishTime[i - 1];
-            turnAroundTime[i] = finishTime[i] - at[i];
-            waitingTime[i] = turnAroundTime[i] - bt[i];
+    totalTime = min + totalTime;
+    tLap = min;
+    int tot = 0;
+    while (tLap < totalTime) {
+      for (int i = 0; i < n; i++) {
+        if (arrivaltimecopy[i] <= tLap) {
+          if (priority[i] < priority[minIndex]) {
+            minIndex = i;
+            currentIndex = i;
+          }
         }
-        float sum = 0;
-        for (int n : waitingTime) 
-        {
-            sum += n;
-        }
-        float averageWaitingTime = sum / numberOfProcess;
-
-        sum = 0;
-        for (int n : turnAroundTime) 
-        {
-            sum += n;
-        }
-        float averageTurnAroundTime = sum / numberOfProcess;
-
-        //print on console the order of processes along with their finish time & turn around time
-        System.out.println("Priority Scheduling Algorithm : ");
-        System.out.format("%20s%20s%20s%20s%20s%20s%20s\n", "ProcessId", "BurstTime", "ArrivalTime", "Priority", "FinishTime", "WaitingTime", "TurnAroundTime");
-        for (int i = 0; i < numberOfProcess; i++) {
-            System.out.format("%20s%20d%20d%20d%20d%20d%20d\n", pid[i], bt[i], at[i], prt[i], finishTime[i], waitingTime[i], turnAroundTime[i]);
-        }
-
-        System.out.format("%100s%20f%20f\n", "Average", averageWaitingTime, averageTurnAroundTime);
+      }
+      tLap = tLap + burstTimecopy[currentIndex];
+      completionTime[currentIndex] = tLap;
+      priority[currentIndex] = 9999;
+      for (int i = 0; i < n; i++) {
+        tot = tot + priority[i];
+      }
     }
-
-    public static void main(String[] args) 
-    {
-        Scanner input = new Scanner(System.in);
-        NonPreemptivePriority obj = new NonPreemptivePriority();
-        obj.getProcessData(input);
-        obj.priorityNonPreemptiveAlgorithm();
+    for (int i = 0; i < n; i++) {
+      TAT[i] = completionTime[i] - arrivaltime[i];
+      waitingTime[i] = TAT[i] - burstTime[i];
+      avgTAT += TAT[i];
+      avgWT += waitingTime[i];
     }
-}
+    System.out.println("\n*** Priority Scheduling (Non Preemptive) ***");
+    System.out.println("Processor\tArrival time\tBrust time\tCompletion Time\t\tTurn around time\tWaiting time");
+    System.out.println(
+        "----------------------------------------------------------------------------------------------------------");
+    for (int i = 0; i < n; i++) {
+      System.out.println("P" + process[i] + "\t\t" + arrivaltime[i] + "ms\t\t" + burstTime[i] + "ms\t\t"
+          + completionTime[i] + "ms\t\t\t" + TAT[i] + "ms\t\t\t" + waitingTime[i] + "ms");
 
+    }
+    avgWT /= n;
+    avgTAT /= n;
+    System.out.println("\nAverage Wating Time: " + avgWT);
+    System.out.println("Average Turn Around Time: " + avgTAT);
+    sc.close();
+
+  }
+}   
