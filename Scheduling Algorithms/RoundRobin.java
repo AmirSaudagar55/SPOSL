@@ -1,66 +1,84 @@
-import java.util.Scanner;
+import java.util.*;
 
-public class RoundRobin {
-    public static void main(String args[]) {
-        int n, i, qt, count = 0, temp, sq = 0;
-        int[] bt, wt, tat, rem_bt;
-        float awt = 0, atat = 0;
-        
-        bt = new int[10];
-        wt = new int[10];
-        tat = new int[10];
-        rem_bt = new int[10];
-        
-        Scanner s = new Scanner(System.in);
-        
-        System.out.print("Enter the number of processes (maximum 10) = ");
-        n = s.nextInt();
-        
-        System.out.print("Enter the burst time of the processes\n");
-        for (i = 0; i < n; i++) {
-            System.out.print("P" + i + " = ");
-            bt[i] = s.nextInt();
-            rem_bt[i] = bt[i];
+class Process {
+    int processID;
+    int arrival, burst, waiting, turnAround, remainingTime;
+    int finish, completionTime;
+}
+
+public class RRScheduling {
+
+    public static void main(String[] args) {
+        int n, sumBurst = 0, quantum, time;
+        double avgWAT = 0, avgTAT = 0;
+        Scanner sc = new Scanner(System.in);
+        Queue<Integer> q = new LinkedList<>();
+        System.out.println("*** RR Scheduling (Preemptive) ***");
+        System.out.print("Enter Number of Process: ");
+        n = sc.nextInt();
+        Process[] p = new Process[n];
+        for (int i = 0; i < n; i++) {
+            p[i] = new Process();
+            p[i].processID = i + 1;
+            System.out.print("Enter the arrival time for P" + (i + 1) + ": ");
+            p[i].arrival = sc.nextInt();
+            System.out.print("Enter the burst time for P" + (i + 1) + ": ");
+            p[i].burst = sc.nextInt();
+            p[i].remainingTime = p[i].burst;
+            p[i].finish = 0;
+            sumBurst += p[i].burst;
+            System.out.println();
         }
-        
-        System.out.print("Enter the quantum time: ");
-        qt = s.nextInt();
-        
-        while (true) {
-            for (i = 0, count = 0; i < n; i++) {
-                temp = qt;
-                if (rem_bt[i] == 0) {
-                    count++;
-                    continue;
+        System.out.print("\nEnter time quantum: ");
+        quantum = sc.nextInt();
+        Process pTemp;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (p[i].arrival > p[j].arrival) {
+                    pTemp = p[i];
+                    p[i] = p[j];
+                    p[j] = pTemp;
                 }
-                if (rem_bt[i] > qt)
-                    rem_bt[i] = rem_bt[i] - qt;
-                else if (rem_bt[i] >= 0) {
-                    temp = rem_bt[i];
-                    rem_bt[i] = 0;
-                }
-                sq = sq + temp;
-                tat[i] = sq;
             }
-            if (n == count)
-                break;
         }
-        
-        System.out.print("--------------------------------------------------------------------------------");
-        System.out.print("\nProcess\t      Burst Time\t       Turnaround Time\t          Waiting Time\n");
-        System.out.print("--------------------------------------------------------------------------------");
-        
-        for (i = 0; i < n; i++) {
-            wt[i] = tat[i] - bt[i];
-            awt = awt + wt[i];
-            atat = atat + tat[i];
-            System.out.print("\n " + (i + 1) + "\t " + bt[i] + "\t\t " + tat[i] + "\t\t " + wt[i] + "\n");
+        q.add(0);
+        for (time = p[0].arrival; time < sumBurst;) {
+            Integer I = q.remove();
+            int i = I.intValue();
+            if (p[i].remainingTime <= quantum) {
+                time += p[i].remainingTime;
+                p[i].remainingTime = 0;
+                p[i].finish = 1;
+                p[i].completionTime = time;
+                p[i].waiting = time - p[i].arrival - p[i].burst;
+                p[i].turnAround = time - p[i].arrival;
+                for (int j = 0; j < n; j++) {
+                    Integer J = Integer.valueOf(j);
+                    if ((p[j].arrival <= time) && (p[j].finish != 1) && (!q.contains(J)))
+                        q.add(j);
+                }
+            } else {
+                time += quantum;
+                p[i].remainingTime -= quantum;
+                for (int j = 0; j < n; j++) {
+                    Integer J = Integer.valueOf(j);
+                    if (p[j].arrival <= time && p[j].finish != 1 && i != j && (!q.contains(J)))
+                        q.add(j);
+                }
+                q.add(i);
+            }
         }
-        
-        awt = awt / n;
-        atat = atat / n;
-        
-        System.out.println("\nAverage Waiting Time = " + awt + "\n");
-        System.out.println("Average Turnaround Time = " + atat);
+        System.out.println("\n*** RR Scheduling (Preemptive) ***");
+        System.out.println("Processor\tArrival time\tBrust time\tCompletion Time\t\tTurn around time\tWaiting time");
+        System.out.println(
+                "----------------------------------------------------------------------------------------------------------");
+        for (int i = 0; i < n; i++) {
+            System.out.println("P" + p[i].processID + "\t\t" + p[i].arrival + "ms\t\t" + p[i].burst + "ms\t\t"
+                    + p[i].completionTime + "ms\t\t\t" + p[i].turnAround + "ms\t\t\t" + p[i].waiting + "ms");
+            avgWAT += p[i].waiting;
+            avgTAT += p[i].turnAround;
+        }
+        System.out.println("\nAverage turn around time of processor: " + (avgTAT / n)
+                + "ms\nAverage waiting time of processor: " + (avgWAT / n) + "ms");
     }
 }
