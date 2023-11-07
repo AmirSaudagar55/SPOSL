@@ -1,5 +1,5 @@
 void setup(){
- pinMode(2, INPUT); // IR Sensor pin INPUT
+ pinMode(3, INPUT); // IR Sensor pin INPUT
  pinMode(13, OUTPUT); // LED Pin Output
  Serial.begin(9600);
 }
