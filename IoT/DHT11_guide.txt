@@ -1,0 +1,13 @@
+Video link : https://www.youtube.com/watch?v=aTFpYflYOG4
+
+1) Paste the code in arduino ide.
+2) DO connection as provided in the Code
+3) Follow step to add library
+    i) Sektch
+    ii) Include library
+    iii) Manage library
+    iV) Library Manager will appear -> searc as "dht11"
+        a) Click on "DHT sensor library" Install
+        b) Click on "close" for Library Manager
+    v) Upload the code
+    
