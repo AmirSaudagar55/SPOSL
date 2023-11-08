@@ -123,3 +123,31 @@ class NonPriorityScheduling {
 
   }
 }   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Arival Time : 0 1 3 4 5 6 10
+// Burst Time : 8 2 4 1 6 5 1
+// Priorities : 3 4 4 5 2 6 1
+// Gant chart : A E G B C D F
+// Average TaT : 13.571
+// Average W.T : 9.714
