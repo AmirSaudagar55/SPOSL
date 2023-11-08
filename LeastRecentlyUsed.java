@@ -75,3 +75,38 @@ public class LeastRecentlyUsed {
 
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Total frames: 3
+// Algorithm: LRU
+// Reference string length:  9 references
+// String:  1 2 1 0 3 0 4 2 4
+
+// Total references: 9
+// Total distinct references: 5
+// Hits: 3
+// Faults: 6
+// Hit rate: 3/9 = 33.333333333333%
+// Fault rate: 6/9 = 66.666666666667%
