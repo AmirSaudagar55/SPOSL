@@ -85,3 +85,40 @@ public class OptimalPageReplacement {
         sc.close();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Total frames: 3
+// Algorithm: OPT
+// Reference string length:  9 references
+// String:  1 2 1 0 3 0 4 2 4
+
+// Total references: 9
+// Total distinct references: 5
+// Hits: 4
+// Faults: 5
+// Hit rate: 4/9 = 44.444444444444%
+// Fault rate: 5/9 = 55.555555555556%
