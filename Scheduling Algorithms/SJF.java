@@ -72,3 +72,33 @@ public class SJF {
         sc.close();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Arival Time : 4 6 2 2 5 3
+// Burst Time : 1 1 4 6 2 2
+// Gant chart : C F A B E C D
+// Average TaT : 5.833	
+// Average W.T : 3.167
