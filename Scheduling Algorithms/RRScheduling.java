@@ -82,3 +82,22 @@ public class RRScheduling {
                 + "ms\nAverage waiting time of processor: " + (avgWAT / n) + "ms");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Arival Time : 4 6 2 2 5 3
+// Burst Time : 1 1 4 6 2 2
+// Time Quantum : 4
+// Gant chart : C D F A E B D
+// Average TaT : 9.667	
+// Average W.T : 7
