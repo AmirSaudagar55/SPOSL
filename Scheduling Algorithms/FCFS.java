@@ -77,3 +77,25 @@ public class FCFS {
         System.out.println("Average Waiting Time (WT): " + avgWT);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Arival Time : 4 6 2 2 5 3
+// Burst Time : 1 1 4 6 2 2
+// Gant chart : C D F A E B
+// Average TaT : 10	
+// Average W.T : 7.333
